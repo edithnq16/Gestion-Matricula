@@ -1,10 +1,17 @@
 <?php
 require '../../../config/database.php';
 
-$sqlgrados = "SELECT p.ID, p.Descripcion,M.monto ,p.Estado, p.FechaCreacion, p.UsuarioCreacion, p.FechaModificacion, p.UsuarioModificacion FROM grado AS p
-INNER JOIN monto M on p.MontoID = M.ID";
+$sqlpersonas = "SELECT p.ID, p.DNI, p.Nombre, p.Apellido, p.FechaNacimiento, p.Domicilio, p.Genero, p.Telefono, p.Email, r.Descripcion, p.FechaCreacion, p.UsuarioCreacion, p.FechaModificacion, p.UsuarioModificacion
+FROM persona AS p INNER JOIN rol AS r ON r.ID = p.RolID";
 
-$grados = $conn->query($sqlgrados);
+$personas = $conn->query($sqlpersonas);
+
+
+$sqlrol = "SELECT ID, Descripcion, Estado, FechaCreacion, UsuarioCreacion, FechaModificacion, UsuarioModificacion FROM rol";
+
+$roles = $conn->query($sqlrol);
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +19,7 @@ $grados = $conn->query($sqlgrados);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel - Grado</title>
+    <title>PANEL - PERSONAS</title>
 
 
     <link rel="stylesheet" href="../../../../assets/css/bootstrap.min.css">
@@ -44,12 +51,12 @@ $grados = $conn->query($sqlgrados);
                     echo '<p class="text-danger";>Error: No se pudo insertar el registro, intentalo nuevamente.</p>';
                 }
                 ?>
-                <h2 class="text-center">GRADOS</h2>
+                <h2 class="text-center">PERSONAS</h2>
 
                 <div class="row justify-content-end">
                     <div class="col-auto">
                         <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoModal"><i class="fa-solid fa-circle-plus"></i>
-                            Nuevo grado</a>
+                            Nueva persona</a>
                     </div>
                 </div>
 
@@ -57,33 +64,36 @@ $grados = $conn->query($sqlgrados);
                     <thead class="table-dark">
                         <tr>
                             <th>#</th>
-                            <th>Descripcion</th>
-                            <th>Precio</th>
-                            <th>Estado</th>
-                            <th>Fecha Creación</th>
-                            <th>Usuario Creación</th>
-                            <th>Fecha Modificación</th>
-                            <th>Usuario Modificación</th>
+                            <th>DNI</th>
+                            <th>Nombres y apellidos</th>
+                            <th>Fecha Nacimiento</th>
+                            <th>Domicilio</th>
+                            <th>Genero</th>
+                            <th>Telf.</th>
+                            <th>Email</th>
+                            <th>Rol</th>
                             <th colspan="2" class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php while ($row = $grados->fetch_assoc()) { ?>
+                        <?php while ($row = $personas->fetch_assoc()) { ?>
                             <tr>
                                 <td><?= $row['ID']; ?></td>
+                                <td><?= $row['DNI']; ?></td>
+                                <td><?= $row['Nombre'] . ' ' . $row['Apellido']; ?></td>
+                                <td><?= date('Y-m-d', strtotime($row['FechaNacimiento'])); ?></td>
+                                <td><?= $row['Domicilio'];?></td>
+                                <td><?= $row['Genero']; ?></td>
+                                <td><?= $row['Telefono']; ?></td>
+                                <td><?= $row['Email']; ?></td>
                                 <td><?= $row['Descripcion']; ?></td>
-                                <td><?= $row['monto']; ?></td>
-                                <td><?= $row['Estado'] == "1" ? "ACTIVO" : "INACTIVO"; ?></td>
-                                <td><?= isset($row['FechaCreacion']) ? date('Y-m-d', strtotime($row['FechaCreacion'])) : ''; ?></td>
-                                <td><?= $row['UsuarioCreacion']; ?></td>
-                                <td><?= isset($row['FechaModificacion']) ? date('Y-m-d', strtotime($row['FechaModificacion'])): ''; ?></td>
-                                <td><?= $row['UsuarioModificacion']; ?></td>
 
                                 <td >
                                     <a href="#" class="btn btn-sm btn-light m-1 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#editaModal" data-bs-id="<?= $row['ID']; ?>"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
 
                                     <a href="#" class="btn btn-sm btn-light m-1 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#eliminaModal" data-bs-id="<?= $row['ID']; ?>"><i class="fa-solid fa-trash"></i></i> Eliminar</a>
                                 </td>
+
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -93,12 +103,8 @@ $grados = $conn->query($sqlgrados);
     </div>
 
 
-    <?php
 
-    $sqlmontos = "SELECT p.ID, p.Descripcion,p.Monto ,p.Estado, p.FechaCreacion, p.UsuarioCreacion, p.FechaModificacion, p.UsuarioModificacion FROM monto AS p";
-    $montos = $conn->query($sqlmontos);
-    ?>
-    <?php include '../../modals/RegistrarGrado.php'; ?>
+    <?php include '../../modals/RegistrarPersona.php'; ?>
 
     <script src="../../../../assets/js/bootstrap.min.js"></script>
     <script src="../../../../assets/js/bootstrap.bundle.min.js"></script>
