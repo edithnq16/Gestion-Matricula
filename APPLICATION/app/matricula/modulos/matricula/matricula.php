@@ -1,11 +1,10 @@
-
 <?php
 require '../../../config/database.php';
 
-$sqlmatri = "SELECT m.ApoderadoMatricula, bp.NumeroBoleta, bp.MontoBoleta,p.DNI, p.Nombre, p.Apellido, g.Descripcion, bp.Estado FROM matricula m 
+$sqlmatri = "SELECT m.ID, m.ApoderadoMatricula, bp.NumeroBoleta, bp.MontoBoleta,p.DNI, p.Nombre, p.Apellido, g.Descripcion, bp.Estado FROM matricula m 
 INNER JOIN boletapago bp ON bp.ID = m.BoletaID 
 INNER JOIN persona p ON m.PersonaID = p.ID
-INNER JOIN grado g ON g.ID = m.GradoID";
+INNER JOIN grado g ON g.ID = m.GradoID ORDER BY m.ID desc";
 $matriculas = $conn->query($sqlmatri);
 
 
@@ -34,12 +33,14 @@ $secciones = $conn->query($sqlseccion);
     <link rel="stylesheet" href="../../../../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../../../assets/css/all.min.css">
     <link rel="stylesheet" href="../../../../assets/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 </head>
 
 <body>
 
 
-<?php include '../cabecera/cabecera.php'; ?>
+    <?php include '../cabecera/cabecera.php'; ?>
 
     <div class="d-flex">
         <!--Barra lateral-->
@@ -50,6 +51,21 @@ $secciones = $conn->query($sqlseccion);
         <!--Contenido-->
         <div style="width: 100%;">
             <div class="container py-3">
+
+                <?php
+                if (isset($_GET["success"]) && $_GET["success"] == 100) {
+                    echo '<p class="text-success";>Éxito: Se realizó la inserción exitosamente.</p>';
+                }
+                if (isset($_GET["error"]) && $_GET["error"] == 101) {
+                    echo '<p class="text-danger";>Error: No se encontró el usuario administrativo, inicia sesión nuevamente.</p>';
+                }
+                if (isset($_GET["error"]) && $_GET["error"] == 105) {
+                    echo '<p class="text-danger";>Error: No se pudo insertar el registro, intentalo nuevamente.</p>';
+                }
+                if (isset($_GET["error"]) && $_GET["error"] == 106) {
+                    echo '<p class="text-danger";>Error: No se pudo insertar el registro, no seleccionó cursos.</p>';
+                }
+                ?>
                 <h2 class="text-center">MATRICULA</h2>
 
                 <div class="row justify-content-end">
@@ -69,7 +85,11 @@ $secciones = $conn->query($sqlseccion);
                             <th>DNI</th>
                             <th>Nombres</th>
                             <th>Grado</th>
-                            <th colspan="1" class="text-center">Estado</th>
+
+                            <th>Estado</th>
+
+                            <th>Accion</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -82,21 +102,37 @@ $secciones = $conn->query($sqlseccion);
                                 <td><?= $row['DNI']; ?></td>
                                 <td><?= $row['Nombre'] . ' ' . $row['Apellido']; ?></td>
                                 <td><?= $row['Descripcion']; ?></td>
+                                <td><?php
+                                    if ($row['Estado'] === "PE") {
+                                        echo 'PENDIENTE';
+                                    } else if ($row['Estado'] === "AN") {
+                                        echo 'ANULADO';
+                                    } else {
+                                        echo 'PAGADO';
+                                    }
 
-                                <td >
-                                    <?php 
-                                        if($row['Descripcion'] === "PR"){
-                                            echo '<a href="#" class="btn btn-sm btn-light m-1 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#editaModal" data-bs-id="<?= $row[\'ID\']; ?>"><i class="fa-solid fa-ban"></i> Cancelar Matrícula</a>';
-                                        }
-                                        else if ($row['Descripcion'] === "AN"){
-                                            echo '<span class="m-1 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#editaModal" data-bs-id="<?= $row[\'ID\']; ?>"><i class="bi bi-x-circle"></i>ANULADO</span>';
-                                        }
-                                        else{
-                                            echo '<span class="m-1 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#editaModal" data-bs-id="<?= $row[\'ID\']; ?>"><i class="fa-sharp fa-light fa-money-bill"></i></i>PAGADO</span>';
-                                        }
-                                    
+
+                                    ?></td>
+                                <td><a href="#" class="btn btn-sm btn-outline-info text-dark m-1 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#editaModal" data-bs-id="<?= $row['ID']; ?>">
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
+                                                <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
+                                                <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8m0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5" />
+                                            </svg>
+                                        </div>
+                                        DETALLE
+                                    </a>
+                                    <?php
+                                    if ($row['Estado'] === "PE") {
+                                        echo '<a href="#" class="btn btn-sm btn-outline-danger text-dark m-1 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#editaModal" data-bs-id="<?= $row[\'ID\']; ?>"><i class="fa-solid fa-ban"></i>ANULAR</a>';
+                                    } else if ($row['Estado'] === "AN") {
+                                        echo '<span class="m-1 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#editaModal" data-bs-id="<?= $row[\'ID\']; ?>"><i class="bi bi-x-circle"></i>ANULADO</span>';
+                                    } else {
+                                        echo '';
+                                    }
+
                                     ?>
-                                    
+
                                 </td>
 
                             </tr>

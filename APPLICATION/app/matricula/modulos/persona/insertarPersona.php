@@ -1,14 +1,19 @@
-<script>
-    var usuarioId = localStorage.getItem("identificador");
-</script>
+
 <?php
 
 
 require '../../../config/database.php';
 
-$descripcion = isset($_POST['nombre']) ? $_POST['nombre'] : '';
-$alumnosMax = isset($_POST['alumnosMax']) ? $_POST['alumnosMax'] : '';
-$estado = isset($_POST['estado']) ? $_POST['estado'] : '';
+$nombre = isset($_POST['nombre']) ? $_POST['nombre'] : '';
+$apellido = isset($_POST['apellido']) ? $_POST['apellido'] : '';
+$dni = isset($_POST['dni']) ? $_POST['dni'] : '';
+$domicilio = isset($_POST['domicilio']) ? $_POST['domicilio'] : '';
+$telf = isset($_POST['telf']) ? $_POST['telf'] : '';
+$email = isset($_POST['email']) ? $_POST['email'] : '';
+$fechaNacimiento = isset($_POST['fechaNacimiento']) ? $_POST['fechaNacimiento'] : '';
+$genero = isset($_POST['genero']) ? $_POST['genero'] : '';
+$rol = isset($_POST['rol']) ? $_POST['rol'] : '';
+$password = isset($_POST['password']) ? $_POST['password'] : '';
 $usuarioId = isset($_POST['identificador']) ? $_POST['identificador'] : '';
 
 
@@ -27,21 +32,55 @@ if ($nombreUsuario === false) {
     if ($row !== null) {
         $usuario = $row['Nombre'] . ' ' . $row['Apellido'];
     } else {
-        header("Location: seccion.php?error=101");
+        header("Location: persona.php?error=101");
     }
 }
 
-$sql = "INSERT INTO seccion( Descripcion, AlumnosMax, Estado, FechaCreacion, UsuarioCreacion)
-    VALUES ('$descripcion','$alumnosMax','$estado',NOW(),'$usuario')";
+$sqlInsertarPersona = "INSERT INTO persona( DNI
+, Nombre
+, Apellido
+, FechaNacimiento
+, Domicilio
+, Genero
+, Telefono
+, Email
+, RolID
+, FechaCreacion
+, UsuarioCreacion)
+VALUES (
+    '$dni'
+    ,'$nombre'
+    ,'$apellido'
+    , '$fechaNacimiento'
+    , '$domicilio'
+    , '$genero'
+    , '$telf'
+    , '$email'
+    , '$rol'
+    ,NOW()
+    ,'$usuario')";
 
 
-$resultado = $conn->query($sql);
-
+$resultado = $conn->query($sqlInsertarPersona);
 if ($resultado) {
     $id = $conn->insert_id;
-    header("Location: seccion.php?error=100");
+
+    if ($id > 0) {
+        $sqlInsertarUsuario = "INSERT INTO Usuario
+        (
+            PersonaID,RolID,Password,FechaCreacion,UsuarioCreacion
+        ) VALUES ($id,$rol,'$password',NOW(),'$usuario')";
+
+        $result = $conn->query($sqlInsertarUsuario);
+        if ($result) {
+
+            header("Location: persona.php?success=100");
+        }else{
+            header("Location: persona.php?error=105");
+        }
+    } else {
+    }
 } else {
-    header("Location: seccion.php?error=105");
 }
 
 $conn->close();

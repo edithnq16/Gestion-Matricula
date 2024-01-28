@@ -41,7 +41,7 @@ $roles = $conn->query($sqlrol);
         <div style="width: 100%;">
             <div class="container py-3">
                 <?php
-                if (isset($_GET["error"]) && $_GET["error"] == 100) {
+                if (isset($_GET["success"]) && $_GET["success"] == 100) {
                     echo '<p class="text-success";>Éxito: Se realizó la inserción exitosamente.</p>';
                 }
                 if (isset($_GET["error"]) && $_GET["error"] == 101) {
@@ -70,9 +70,8 @@ $roles = $conn->query($sqlrol);
                             <th>Domicilio</th>
                             <th>Genero</th>
                             <th>Telf.</th>
-                            <th>Email</th>
                             <th>Rol</th>
-                            <th colspan="2" class="text-center">Acciones</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,10 +84,9 @@ $roles = $conn->query($sqlrol);
                                 <td><?= $row['Domicilio'];?></td>
                                 <td><?= $row['Genero']; ?></td>
                                 <td><?= $row['Telefono']; ?></td>
-                                <td><?= $row['Email']; ?></td>
                                 <td><?= $row['Descripcion']; ?></td>
 
-                                <td >
+                                <td  colspan="2">
                                     <a href="#" class="btn btn-sm btn-light m-1 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#editaModal" data-bs-id="<?= $row['ID']; ?>"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
 
                                     <a href="#" class="btn btn-sm btn-light m-1 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#eliminaModal" data-bs-id="<?= $row['ID']; ?>"><i class="fa-solid fa-trash"></i></i> Eliminar</a>
