@@ -34,7 +34,7 @@ $grados = $conn->query($sqlgrados);
         <div style="width: 100%;">
             <div class="container py-3">
                 <?php
-                if (isset($_GET["error"]) && $_GET["error"] == 100) {
+                if (isset($_GET["success"]) && $_GET["success"] == 100) {
                     echo '<p class="text-success";>Éxito: Se realizó la inserción exitosamente.</p>';
                 }
                 if (isset($_GET["error"]) && $_GET["error"] == 101) {

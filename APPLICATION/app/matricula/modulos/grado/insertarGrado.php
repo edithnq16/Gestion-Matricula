@@ -53,7 +53,7 @@ $resultado = $conn->query($sql);
 
 if ($resultado) {
     $id = $conn->insert_id;
-    header ("Location: grado.php?error=100");
+    header ("Location: grado.php?success=100");
 } else {
     header("Location: grado.php?error=105");
 }

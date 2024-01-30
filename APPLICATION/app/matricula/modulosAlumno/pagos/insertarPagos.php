@@ -53,6 +53,8 @@ if (!$nombreUsuario) {
                     $queryPagarResultado = $conn->query($queryPagarMatricula);
 
                     if (!$queryPagarResultado) {
+
+                        echo 'ERROR';
                     } else {
 
                         $queryObtenerGradoCurso = "SELECT b.GradoID, b.CursosID,b.SeccionID FROM matricula b WHERE b.BoletaID = $idBoleta";
