@@ -20,7 +20,4 @@ if (isset($_GET['id'])) {
 } else {
     echo "Error: 'id' no proporcionado en la solicitud.";
 }
-
-
-
 ?>

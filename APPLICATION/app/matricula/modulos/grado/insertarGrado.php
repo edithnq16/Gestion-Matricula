@@ -12,10 +12,14 @@ $montoPrecio = isset($_POST['montoPrecio']) ? $_POST['montoPrecio'] :'';
 $estado = isset($_POST['estado']) ? $_POST['estado'] : '';
 $usuarioId = isset($_POST['identificador']) ? $_POST['identificador'] : '';
 $nuevo = isset($_POST['precio']) ? $_POST['precio'] : '';
+
 $sql = '';
 $usuario = '';
 $queryUsuario = 'SELECT Nombre, Apellido FROM persona WHERE ID = '. "'" .strval($usuarioId) ."'";
 $nombreUsuario = $conn->query($queryUsuario);
+
+
+
 
 if ($nombreUsuario === false) {
     header("Location: grado.php?error=105");

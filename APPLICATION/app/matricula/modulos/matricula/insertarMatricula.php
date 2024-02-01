@@ -26,22 +26,13 @@ if (!empty($cursosSeleccionados)) {
     foreach ($cursosSeleccionados as $cursoSeleccionado) {
         $cursos .= $cursoSeleccionado . ',';
     }
-
     $cursoTexto = rtrim($cursos, ',');
-
-
     $queryUsuario = 'SELECT Nombre, Apellido FROM persona WHERE ID = ' . "'" . strval($usuarioId) . "'";
     $nombreUsuario = $conn->query($queryUsuario);
-
     $queryAlumno = 'SELECT ID,Nombre, Apellido FROM persona WHERE DNI= ' . "'" . strval($dni) . "'";
     $nombreAlumno = $conn->query($queryAlumno);
-
     $queryMonto = "SELECT m.Monto FROM grado g  INNER JOIN monto m ON m.ID = g.MontoID WHERE g.ID = $grado";
     $montoMat = $conn->query($queryMonto);
-
-
-
-
     $queryCorrelativo = "SELECT Correlativo FROM correlativo WHERE Codigo = 'BM'";
     $correlativo = $conn->query($queryCorrelativo);
 
@@ -67,7 +58,6 @@ if (!empty($cursosSeleccionados)) {
             header("Location: grado.php?error=101");
         }
     }
-
     if ($nombreUsuario === false) {
         header("Location: matricula.php?error=105");
     } else {
@@ -92,8 +82,6 @@ if (!empty($cursosSeleccionados)) {
     $boletaMatricula = "BM001-" . str_pad($correlativo + 1, 5, '0', STR_PAD_LEFT);
     $sqlBoletaPago = "INSERT INTO boletapago(NumeroBoleta, MontoBoleta, Estado, FechaCreacion, UsuarioCreacion) VALUES('$boletaMatricula',$montoMat,'PE',NOW(), '$nombreUsuario')";
     $matricula = $conn->query($sqlBoletaPago);
-
-
     if ($matricula) {
         $idMatricula = $conn->insert_id;
         $sqlCorrelativo = "UPDATE correlativo SET Correlativo = $correlativo+1 WHERE Codigo = 'BM'";
@@ -120,47 +108,9 @@ else{
 
 
 
-// if ($nombreUsuario === false) {
-//     header("Location: grado.php?error=105");
-// } else {
-//     $row = $nombreUsuario->fetch_assoc();
-//     if ($row !== null) {
-//         $usuario = $row['Nombre'] . ' ' . $row['Apellido'];
-//     } else {
-//         header("Location: grado.php?error=101");
-//     }
-// }
-
-// if ($nuevo === "existente") {
-//     $sql = "INSERT INTO grado( Descripcion, MontoID, Estado, FechaCreacion, UsuarioCreacion)
-//     VALUES ('$descripcion','$montoID','$estado',NOW(),'$usuario')";
-
-// } else {
-
-//     $sqlmonto = "INSERT INTO monto( Descripcion, Monto, Estado, FechaCreacion, UsuarioCreacion)
-//     VALUES ('$descripcion','$montoPrecio','$estado',NOW(),'$usuario')";
-
-//     $resultadoMonto = $conn->query($sqlmonto);
-
-//     if ($resultadoMonto) {
-//         $idMonto = $conn->insert_id;
-
-//         $sql = "INSERT INTO grado( Descripcion, MontoID, Estado, FechaCreacion, UsuarioCreacion)
-//         VALUES ('$descripcion','$idMonto','$estado',NOW(),'$usuario')";
-//     } else {
-//         header("Location: grado.php?error=105");
-//     }
-// }
-// $resultado = $conn->query($sql);
-
-// if ($resultado) {
-//     $id = $conn->insert_id;
-//     header ("Location: grado.php?error=100");
-// } else {
-//     header("Location: grado.php?error=105");
-// }
 
 
-// $conn->close();
+
+$conn->close();
 
 ?>

@@ -8,9 +8,6 @@
       </div>
       <div class="modal-body">
         <form action="../matricula/insertarMatricula.php" method="post" enctype="multipart/form-data">
-
-
-
           <div class="row align-items-end">
             <div class="col-md-6">
               <label for="dni" class="form-label">Ingresa el DNI:</label>
@@ -34,7 +31,6 @@
               <input type="text" name="descripcionMat" id="descripcionMat" class="form-control" required>
             </div>
           </div>
-
           <div class="row mt-3 mb-3">
             <div class="col-md-6">
               <label for="grado" class="form-label">Grado:</label>
@@ -44,13 +40,11 @@
                 <?php } ?>
               </select>
             </div>
-
             <div class="col-md-6">
               <label for="montoMat" class="form-label">Monto Mat.:</label>
               <input type="text" name="montoMat" id="montoMat" class="form-control" disabled>
             </div>
           </div>
-
           <div class="row mt-3 mb-3">
           <div class="col-md-6">
               <label for="seccion" class="form-label">Seccion:</label>
@@ -73,17 +67,13 @@
               </div>
             </div>
           </div>
-
           <input type="hidden" name="identificador" id="identificador" value="">
-
           <div class="row">
             <div class="col-md-5 mb-3">
               <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
             </div>
           </div>
-
         </form>
-
       </div>
     </div>
   </div>

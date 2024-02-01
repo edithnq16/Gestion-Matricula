@@ -85,11 +85,8 @@ $secciones = $conn->query($sqlseccion);
                             <th>DNI</th>
                             <th>Nombres</th>
                             <th>Grado</th>
-
                             <th>Estado</th>
-
                             <th>Accion</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -110,8 +107,6 @@ $secciones = $conn->query($sqlseccion);
                                     } else {
                                         echo 'PAGADO';
                                     }
-
-
                                     ?></td>
                                 <td><a href="#" class="btn btn-sm btn-outline-info text-dark m-1 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#editaModal" data-bs-id="<?= $row['ID']; ?>">
                                         <div>
@@ -130,11 +125,8 @@ $secciones = $conn->query($sqlseccion);
                                     } else {
                                         echo '';
                                     }
-
                                     ?>
-
                                 </td>
-
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -142,9 +134,6 @@ $secciones = $conn->query($sqlseccion);
             </div>
         </div>
     </div>
-
-
-
     <?php include '../../modals/RegistrarMatricula.php'; ?>
 
 
